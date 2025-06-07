@@ -276,6 +276,32 @@ app.post('/api/reset-password', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// In /api/properties route, replace Multer upload
+app.post('/api/properties', authenticate, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Please login to add a property' });
+    }
+    const { title, description, price, contactNumber } = req.body;
+    if (!title || !description || !price || !contactNumber || !req.file) {
+      return res.status(400).json({ message: 'Please fill in all fields and upload an image' });
+    }
+    const result = await cloudinary.uploader.upload(req.file.path);
+    const image = result.secure_url;
+    const property = new Property({ title, description, price, image, contactNumber, userId: req.userId, sold: false });
+    await property.save();
+    res.status(201).json({ message: 'Property added successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // Add Property Route
 app.post('/api/properties', authenticate, upload.single('image'), async (req, res) => {
