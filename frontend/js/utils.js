@@ -12,3 +12,4 @@ export function applySavedTheme() {
     const body = document.body;
     body.classList.add(savedTheme === 'dark' ? 'dark-mode' : 'light-mode');
 }
+const BASE_URL = 'https://vrentals-backend.onrender.com/api';
