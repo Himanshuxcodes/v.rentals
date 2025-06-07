@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register - V.Rentals</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="dark-mode">
+    <header>
+        <h1>House Rental Portal</h1>
+        <div class="nav-icons">
+            <a href="mailto:himanshuok09@gmail.com" class="email-icon" title="Contact Us">✉️</a>
+            <span class="theme-toggle" title="Toggle Dark Mode">🌙</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="auth-form" id="login-form">
+            <h2>Login</h2>
+            <input type="email" id="login-email" placeholder="Email" required>
+            <input type="password" id="login-password" placeholder="Password" required>
+            <button id="login-button">Login</button>
+            <p>Don't have an account? <span class="toggle-link" id="show-register">Register</span></p>
+            <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+        </div>
+        <div class="auth-form" id="register-form" style="display: none;">
+            <h2>Register</h2>
+            <input type="text" id="register-username" placeholder="Username" required>
+            <input type="email" id="register-email" placeholder="Email" required>
+            <input type="password" id="register-password" placeholder="Password" required>
+            <button id="register-button">Register</button>
+            <p>Already have an account? <span class="toggle-link" id="show-login">Login</span></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 V.Rentals. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

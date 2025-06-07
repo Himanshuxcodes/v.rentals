@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Property - V.Rentals</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/add-property.css">
+</head>
+<body class="dark-mode">
+    <header>
+        <h1>House Rental Portal</h1>
+        <button class="back-button" onclick="window.location.href='index.html'">Back to Home</button>
+        <div class="nav-icons">
+            <a href="mailto:himanshuok09@gmail.com" class="email-icon" title="Contact Us">✉️</a>
+            <span class="theme-toggle" title="Toggle Dark Mode">🌙</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="add-property-form">
+            <h2>Add Property</h2>
+            <input type="text" id="title" placeholder="Property Title" required>
+            <textarea id="description" placeholder="Property Description" required></textarea>
+            <input type="text" id="price" placeholder="Price (e.g., ₹7,000/month)" required>
+            <input type="text" id="contactNumber" placeholder="Contact Number" required>
+            <input type="file" id="image" accept="image/*" required>
+            <button id="add-property-button">Add Property</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 V.Rentals. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/add-property.js"></script>
+</body>
+</html>
