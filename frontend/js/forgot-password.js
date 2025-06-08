@@ -1,5 +1,9 @@
 import { initNav } from './nav.js';
 
+const BASE_URL = 'https://vrentals-backend.onrender.com/api'; // Use this for production
+// For local testing, comment the above and uncomment the below
+// const BASE_URL = 'http://localhost:5000/api';
+
 let currentEmail = '';
 
 async function sendOTP() {
@@ -10,7 +14,7 @@ async function sendOTP() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/forgot-password', {
+        const response = await fetch(`${BASE_URL}/forgot-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +42,7 @@ async function verifyOTP() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/verify-otp', {
+        const response = await fetch(`${BASE_URL}/verify-otp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +69,7 @@ async function resetPassword() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/reset-password', {
+        const response = await fetch(`${BASE_URL}/reset-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
