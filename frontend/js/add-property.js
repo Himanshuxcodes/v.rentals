@@ -1,5 +1,9 @@
 import { initNav } from './nav.js';
 
+const BASE_URL = 'https://vrentals-backend.onrender.com/api'; // Use this for production
+// For local testing, comment the above and uncomment the below
+// const BASE_URL = 'http://localhost:5000/api';
+
 async function addProperty() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -27,7 +31,7 @@ async function addProperty() {
     formData.append('image', image);
 
     try {
-        const response = await fetch('http://localhost:5000/api/properties', {
+        const response = await fetch(`${BASE_URL}/properties`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
