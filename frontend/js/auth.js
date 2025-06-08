@@ -1,5 +1,9 @@
 import { initNav } from './nav.js';
 
+const BASE_URL = 'https://vrentals-backend.onrender.com/api'; // Use this for production
+// For local testing, comment the above and uncomment the below
+// const BASE_URL = 'http://localhost:5000/api';
+
 function showRegister() {
     document.getElementById('login-form').style.display = 'none';
     document.getElementById('register-form').style.display = 'block';
@@ -19,7 +23,7 @@ async function login() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -48,7 +52,7 @@ async function register() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/register', {
+        const response = await fetch(`${BASE_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, password })
