@@ -1,5 +1,9 @@
 import { initNav } from './nav.js';
 
+const BASE_URL = 'https://vrentals-backend.onrender.com/api'; // Use this for production
+// For local testing, comment the above and uncomment the below
+// const BASE_URL = 'http://localhost:5000/api';
+
 function renderAuthButtons() {
     const authButtons = document.getElementById('auth-buttons');
     const token = localStorage.getItem('token');
@@ -42,7 +46,7 @@ async function markAsSold(propertyId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/api/properties/${propertyId}/sold`, {
+        const response = await fetch(`${BASE_URL}/properties/${propertyId}/sold`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -71,7 +75,7 @@ async function markAsAvailable(propertyId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/api/properties/${propertyId}/available`, {
+        const response = await fetch(`${BASE_URL}/properties/${propertyId}/available`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -93,7 +97,7 @@ async function markAsAvailable(propertyId) {
 
 async function renderProperties() {
     try {
-        const response = await fetch('http://localhost:5000/api/properties', {
+        const response = await fetch(`${BASE_URL}/properties`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
             }
