@@ -18,33 +18,37 @@ Backend: Node.js, Express.js, MongoDB (Mongoose), JWT for login
 Extras: Nodemailer (for emails), Multer (for image uploads), MongoDB Atlas (database)
 Tools: live-server (frontend), npm
 
-vrentals/
-├── backend/
-│   ├── Uploads/            # For image uploads
-│   ├── node_modules/       # Backend packages
-│   ├── package.json
-│   └── server.js           # Backend code
-├── frontend/
-│   ├── css/                # Styles
-│   │   ├── add-property.css
-│   │   ├── auth.css
-│   │   ├── forgot-password.css
-│   │   ├── index.css
-│   │   └── styles.css
-│   ├── js/                 # Scripts
-│   │   ├── add-property.js
-│   │   ├── admin.js        # Admin dashboard logic
-│   │   ├── auth.js
-│   │   ├── forgot-password.js
-│   │   ├── index.js
-│   │   ├── nav.js
-│   │   └── utils.js
-│   ├── add-property.html
-│   ├── admin.html          # Admin dashboard page
-│   ├── auth.html
-│   ├── forgot-password.html
-│   ├── index.html
-│   ├── package.json
-│   └── package-lock.json
-├── .env                    # Secrets (don’t share!)
-└── README.md               # This file
+
+     ## File Structure
+     ```
+     vrentals/
+     ├── backend/
+     │   ├── Uploads/                # Directory for uploaded images
+     │   ├── node_modules/           # Backend dependencies
+     │   ├── package.json            # Backend dependencies and scripts
+     │   ├── package-lock.json
+     │   └── server.js               # Backend server logic
+     ├── frontend/
+     │   ├── css/                    # Stylesheets
+     │   │   ├── add-property.css
+     │   │   ├── auth.css
+     │   │   ├── forgot-password.css
+     │   │   ├── index.css
+     │   │   └── styles.css
+     │   ├── js/                     # JavaScript modules
+     │   │   ├── add-property.js
+     │   │   ├── admin.js
+     │   │   ├── auth.js
+     │   │   ├── forgot-password.js
+     │   │   ├── index.js
+     │   │   ├── nav.js
+     │   │   └── utils.js
+     │   ├── add-property.html       # Add property page
+     │   ├── admin.html
+     │   ├── auth.html               # Login/register page
+     │   ├── forgot-password.html    # Password reset page
+     │   ├── index.html              # Home page with property listings
+     │   ├── package.json            # Frontend dependencies
+     │   └── package-lock.json
+     ├── .env                        # Environment variables
+     └── README.md                   # Project documentation
