@@ -32,6 +32,8 @@ async function login() {
         if (response.ok) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.username);
+            localStorage.setItem('isAdmin', data.isAdmin); // Added
+            localStorage.setItem('userId', data.userId); // Added
             window.location.href = 'index.html';
         } else {
             alert(data.message || 'Login failed');

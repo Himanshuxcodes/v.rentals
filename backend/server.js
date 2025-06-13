@@ -61,7 +61,8 @@ const OTP = mongoose.model('OTP', OTPSchema);
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false } // Added admin field
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -189,8 +190,8 @@ app.post('/api/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, username: user.username });
+    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token, username: user.username, isAdmin: user.isAdmin, userId: user._id }); // Added isAdmin and userId
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -201,14 +202,17 @@ const authenticate = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     req.userId = null;
+    req.isAdmin = false; // Added isAdmin
     return next();
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
+    req.isAdmin = decoded.isAdmin; // Added isAdmin
     next();
   } catch (error) {
     req.userId = null;
+    req.isAdmin = false; // Added isAdmin
     next();
   }
 };
@@ -344,6 +348,10 @@ app.put('/api/properties/:id/sold', authenticate, async (req, res) => {
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
+    // Added permission check
+    if (!req.isAdmin && property.userId.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Unauthorized to mark this property as sold' });
+    }
     property.sold = true;
     await property.save();
     res.json({ message: 'Property marked as sold' });
@@ -362,9 +370,108 @@ app.put('/api/properties/:id/available', authenticate, async (req, res) => {
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
+    // Added permission check
+    if (!req.isAdmin && property.userId.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Unauthorized to mark this property as available' });
+    }
     property.sold = false;
     await property.save();
     res.json({ message: 'Property marked as available' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin Routes
+// Get all users
+app.get('/api/users', authenticate, async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update user admin status
+app.put('/api/users/:id/admin', authenticate, async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    user.isAdmin = req.body.isAdmin;
+    await user.save();
+    res.json({ message: `User ${user.isAdmin ? 'promoted to' : 'demoted from'} admin` });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete user
+app.delete('/api/users/:id', authenticate, async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    await Property.deleteMany({ userId: req.params.id });
+    res.json({ message: 'User and their properties deleted' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Edit property
+app.put('/api/properties/:id', authenticate, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+    const { title, description, price, contactNumber } = req.body;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'vrentals_properties'
+      });
+      fs.unlinkSync(req.file.path);
+      property.image = result.secure_url;
+    }
+    property.title = title || property.title;
+    property.description = description || property.description;
+    property.price = price || property.price;
+    property.contactNumber = contactNumber || property.contactNumber;
+    await property.save();
+    res.json({ message: 'Property updated', property });
+  } catch (error) {
+    console.error('Update property error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete property
+app.delete('/api/properties/:id', authenticate, async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+    const property = await Property.findByIdAndDelete(req.params.id);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+    res.json({ message: 'Property deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

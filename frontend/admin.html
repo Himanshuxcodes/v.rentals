@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - V.Rentals</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <header>
+    <h1>V.Rentals Admin Dashboard</h1>
+    <nav>
+      <a href="index.html">Back to Home</a>
+      <div class="nav-icons">
+        <span class="icon">✉️</span>
+        <span class="icon theme-toggle">🌙</span>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section id="admin-overview">
+      <h2>System Overview</h2>
+      <p>Total Users: <span id="total-users">0</span></p>
+      <p>Total Properties: <span id="total-properties">0</span></p>
+    </section>
+    <section id="user-management">
+      <h2>User Management</h2>
+      <table id="users-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Admin Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    <section id="property-management">
+      <h2>Property Management</h2>
+      <table id="properties-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 V.Rentals. All rights reserved.</p>
+  </footer>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

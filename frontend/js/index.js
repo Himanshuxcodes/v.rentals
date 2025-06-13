@@ -11,6 +11,7 @@ function renderAuthButtons() {
         authButtons.innerHTML = `
             <button id="add-property-button">Add Property</button>
             <button id="logout-button">Logout</button>
+            ${localStorage.getItem('isAdmin') === 'true' ? '<a href="admin.html" id="admin-dashboard-button">Admin Dashboard</a>' : ''}
         `;
         document.getElementById('add-property-button').addEventListener('click', () => {
             window.location.href = 'add-property.html';
@@ -33,6 +34,8 @@ function renderAuthButtons() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('isAdmin'); // Added
+    localStorage.removeItem('userId'); // Added
     renderAuthButtons();
     window.location.href = 'auth.html';
 }
@@ -105,8 +108,11 @@ async function renderProperties() {
         const properties = await response.json();
         const propertiesGrid = document.getElementById('properties-grid');
         const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId'); // Added
+        const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Added
         propertiesGrid.innerHTML = '';
         properties.forEach(property => {
+            const canEdit = isAdmin || (userId && property.userId && property.userId.toString() === userId); // Added
             const propertyCard = document.createElement('div');
             propertyCard.classList.add('property-card');
             if (property.sold) {
@@ -121,8 +127,8 @@ async function renderProperties() {
                     <p class="price">${property.price}</p>
                     <p class="contact">Contact: ${property.contactNumber}</p>
                     <button class="inquire-button" data-contact="${property.contactNumber}" data-title="${property.title}">Inquire Now</button>
-                    ${token && !property.sold ? `<button class="mark-sold-button" data-id="${property._id}">Mark as Sold</button>` : ''}
-                    ${token && property.sold ? `<button class="mark-available-button" data-id="${property._id}">Mark as Available</button>` : ''}
+                    ${token && canEdit && !property.sold ? `<button class="mark-sold-button" data-id="${property._id}">Mark as Sold</button>` : ''}
+                    ${token && canEdit && property.sold ? `<button class="mark-available-button" data-id="${property._id}">Mark as Available</button>` : ''}
                 </div>
             `;
             propertiesGrid.appendChild(propertyCard);
